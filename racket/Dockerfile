@@ -40,7 +40,7 @@ RUN apt-get update && \
 
 # libzmq3-dev -- may or may not need it
 RUN apt-get update && apt-get install -y apt-utils python3 python3-pip  \
-                 curl m4 perl libffi-dev python3-dev pkg-config  libgmp-dev  libzmq5 \
+                 curl m4 perl libffi-dev python3-dev pkg-config  libgmp-dev  libzmq3-dev libzmq5 \
     && rm -rf /var/lib/apt/lists/* /tmp/* /root/.cache/*
 
 ### Install Racket
@@ -79,13 +79,15 @@ RUN chown root /tmp/emacs_user.sh && \
     /tmp/emacs_user.sh
 USER phage
 WORKDIR /home/phage
-
 RUN pip3 install  --upgrade pip
 RUN pip3 install  --user --no-cache-dir 'setuptools>=18.5' 'six>=1.9.0' jupyterlab && \
     mkdir -p /home/phage/.jupyter
 
+ENV PATH $PATH:/home/phage/.local/bin  
 RUN raco pkg install --auto iracket
 RUN raco iracket install
+## to run jupyter lab ...
+## run this command "jupyter-lab --ip 0.0.0.0 --no-browser"
 
 
 
